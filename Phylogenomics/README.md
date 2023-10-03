@@ -35,14 +35,14 @@ We used MAFFT and IQTREE to generate individual gene trees for each locus and as
 
 Multiple different pipelines were used to assess allele phasing in the <i>Lygodium</i> dataset. 
 
-## PATE
-We used [PATE](https://www.biorxiv.org/content/10.1101/2021.05.04.442457v1) to phase alleles based on the targeted probe-region only. 
+## PATÉ
+We used [PATÉ](https://www.biorxiv.org/content/10.1101/2021.05.04.442457v1) to phase alleles based on the target and target+flanking regions. 
 ```
 perl PATE.pl --controlFile PATE.ctl --runmode species --template template.sh --genotype consensus
 perl PATE.pl --controlFile PATE.ctl --runmode alleles --template template.sh --genotype consensus
 ```
 
-Again, we used MAFFT and IQTREE to generate gene trees for each locus. We assessed each tree individually and manually assigned putative subgenomes to each allele where possible. We distributed these alleles into their respective original locus alignments. 
+Again, we used MAFFT and IQTREE to generate gene trees for each locus. We assessed each tree individually and manually assigned putative subgenomes to each allele where possible. We distributed these alleles into their respective original locus alignments using a custom python script. 
 ```
 python distribute_alleles.py -l $locus -i $locus.fasta -p $locus_Phased.fasta -s subgenomes.csv 
 ```
@@ -50,6 +50,10 @@ With the alleles now in their appropriate loci, we re-aligned and generated new 
 
 ## Homologizer 
 
+The 20 loci with the greatest taxon occupancy from the PATÉ phasing were used as input for [homologizer](https://github.com/wf8/homologizer/tree/main) in RevBayes 1.1. We used a multi-processor version of homologizer to run the program more efficiently. 
+```
+mpirun -np 6 rb-mpi lygodium_homologizer.rev
+```
+The data and scripts for running homologizer are available under `Phylogenomics/homologizer/`. 
 ## HybPhaser 
 
-## PhyloNetworks
