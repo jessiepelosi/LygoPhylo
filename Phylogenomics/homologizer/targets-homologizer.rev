@@ -1,0 +1,273 @@
+## Lygodium homologizer analysis in RevBayes for target regions
+
+##01 Read in data
+
+alignments = ["data/L226.fa.nex", "data/L230.fa.nex", "data/L285.fa.nex", "data/L338.fa.nex", "data/L367.fa.nex", "data/L53.fa.nex", "data/L260.fa.nex", "data/L353.fa.nex", "data/L395.fa.nex", "data/L397.fa.nex", "data/L439.fa.nex", "data/L412.fa.nex", "data/L379.fa.nex", "data/L317.fa.nex", "data/L283.fa.nex", "data/L282.fa.nex", "data/L275.fa.nex", "data/L241.fa.nex", "data/L212.fa.nex", "data/L59.fa.nex"]
+
+num_loci = alignments.size()
+
+for (i in 1:num_loci) {
+	data[i] = readDiscreteCharacterData(alignments[i])
+}
+
+##02 Add blanks alleles to polyploids. Need to examine each alignment prior. -- EDIT THIS 
+
+data[1].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_A")
+data[1].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_A")
+data[1].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_A")
+data[1].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[2].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[2].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[2].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[3].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[3].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[3].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[4].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[4].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[4].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_B")
+data[4].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_B")
+data[4].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_B")
+data[4].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[5].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_B")
+data[5].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[6].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[6].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[6].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_B")
+data[6].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_B")
+data[6].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_A")
+data[6].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_B")
+data[6].addMissingTaxa("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_B")
+data[6].addMissingTaxa("UFG_393202_P099_WH01.Lygodium_venustum_LYVE4_B")
+
+data[7].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[7].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[7].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_B")
+data[7].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_A")
+data[7].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[8].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[9].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[9].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[9].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+data[9].addMissingTaxa("UFG_393202_P099_WH08.Lygodium_xfayae_LYXF1_B")
+
+data[10].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_B")
+data[10].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_B")
+data[10].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_B")
+data[10].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_A")
+data[10].addMissingTaxa("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_A")
+data[10].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+data[10].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+data[10].addMissingTaxa("UFG_393202_P099_WH01.Lygodium_venustum_LYVE4_A")
+data[10].addMissingTaxa("UFG_393202_P099_WH08.Lygodium_xfayae_LYXF1_B")
+data[10].addMissingTaxa("UFG_393202_P099_WH09.Lygodium_xfayae_LYXF2_B")
+
+data[11].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[11].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[11].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_A")
+data[11].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_B")
+data[11].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_B")
+data[11].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_A")
+data[11].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_B")
+data[11].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+data[11].addMissingTaxa("UFG_393202_P099_WH09.Lygodium_xfayae_LYXF2_A")
+
+data[12].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[12].addMissingTaxa("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_A")
+data[12].addMissingTaxa("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_A")
+data[12].addMissingTaxa("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_B")
+data[12].addMissingTaxa("UFG_393202_P099_WH01.Lygodium_venustum_LYVE4_A")
+data[12].addMissingTaxa("UFG_393202_P099_WH08.Lygodium_xfayae_LYXF1_B")
+data[12].addMissingTaxa("UFG_393202_P099_WH09.Lygodium_xfayae_LYXF2_B")
+
+data[13].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[13].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[13].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_A")
+data[13].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_B")
+data[13].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_A")
+data[13].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_B")
+
+data[14].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+
+data[15].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[15].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[15].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_A")
+data[15].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_B")
+data[15].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_A")
+data[15].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[16].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[16].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[16].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_A")
+data[16].addMissingTaxa("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_B")
+data[16].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_A")
+data[16].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_B")
+
+data[17].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[17].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[17].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_A")
+data[17].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_B")
+data[17].addMissingTaxa("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_A")
+data[17].addMissingTaxa("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_B")
+data[17].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+data[17].addMissingTaxa("UFG_393202_P099_WH01.Lygodium_venustum_LYVE4_A")
+data[17].addMissingTaxa("UFG_393202_P099_WH08.Lygodium_xfayae_LYXF1_B")
+data[17].addMissingTaxa("UFG_393202_P099_WH09.Lygodium_xfayae_LYXF2_B")
+
+data[18].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[18].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[18].addMissingTaxa("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_A")
+data[18].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_A")
+data[18].addMissingTaxa("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_B")
+data[18].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[19].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[19].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[19].addMissingTaxa("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B")
+
+data[20].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_A")
+data[20].addMissingTaxa("UFG_393202_P063_WD03.Lygodium_oligostachyum_B")
+data[20].addMissingTaxa("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_B")
+
+##03 Randomly assign alleles to subgenomes for polyploids this is the starting point for the search. -- EDIT THIS 
+
+for (i in 1:num_loci) {
+    data[i].setHomeologPhase("UFG_393202_P063_WD03.Lygodium_oligostachyum_A", "Lygodium_oligostachyum_A")
+    data[i].setHomeologPhase("UFG_393202_P063_WD03.Lygodium_oligostachyum_B", "Lygodium_oligostachyum_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_A", "Lygodium_cubense_LYCU1_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WB0607.Lygodium_cubense_LYCU1_B", "Lygodium_cubense_LYCU1_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_A", "Lygodium_heterodoxum_LYHE2_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WC07.Lygodium_heterodoxum_LYHE2_B", "Lygodium_heterodoxum_LYHE2_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_A", "Lygodium_heterodoxum_LYHE5_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WC08.Lygodium_heterodoxum_LYHE5_B", "Lygodium_heterodoxum_LYHE5_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_A", "Lygodium_heterodoxum_LYHE10_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WC09.Lygodium_heterodoxum_LYHE10_B", "Lygodium_heterodoxum_LYHE10_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_A", "Lygodium_oligostachyum_LYOL2_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WE08.Lygodium_oligostachyum_LYOL2_B", "Lygodium_oligostachyum_LYOL2_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_A", "Lygodium_polymorphum_LYPO2_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WF01.Lygodium_polymorphum_LYPO2_B", "Lygodium_polymorphum_LYPO2_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_A", "Lygodium_smithianum_LYSM4_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WG04.Lygodium_smithianum_LYSM4_B", "Lygodium_smithianum_LYSM4_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WH01.Lygodium_venustum_LYVE4_A", "Lygodium_venustum_LYVE4_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WH01.Lygodium_venustum_LYVE4_B", "Lygodium_venustum_LYVE4_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WH08.Lygodium_xfayae_LYXF1_A", "Lygodium_xfayae_LYXF1_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WH08.Lygodium_xfayae_LYXF1_B", "Lygodium_xfayae_LYXF1_B")
+    data[i].setHomeologPhase("UFG_393202_P099_WH09.Lygodium_xfayae_LYXF2_A", "Lygodium_xfayae_LYXF2_A")
+    data[i].setHomeologPhase("UFG_393202_P099_WH09.Lygodium_xfayae_LYXF2_B", "Lygodium_xfayae_LYXF2_B")
+}
+
+##04 Add missing taxa for diploids
+
+for (i in 1:num_loci) {
+    for (j in 1:num_loci) {
+        data[i].addMissingTaxa(data[j].taxa())
+    }
+}
+
+##05 Standard RevBayes params for phylogenetics 
+
+# We'll need some useful information from the alignments:
+num_tips = data[1].ntaxa()
+n_branches = 2 * num_tips - 3
+
+# Now create a vector of branch lengths. We'll draw each branch length from an exponential distribution. We'll also add MCMC scaling moves for each branch length (which we'll store in the moves vector, indexed by the mvi counter).
+
+mvi = 0
+for (i in 1:n_branches) {
+    branch_lengths[i] ~ dnExponential(10)
+    moves[++mvi] = mvScale(branch_lengths[i], weight=1.0)
+}
+# We'll use a uniform topology prior that puts equal probability on all unrooted, fully resolved topologies. Additionally, we'll add MCMC moves for the topology, the nearest-neighbor interchange (NNI) and subtree pruning and regrafting (SPR) tree arrangment moves.
+
+topology ~ dnUniformTopology(data[1].taxa())
+moves[++mvi] = mvNNI(topology, weight=40.0)
+moves[++mvi] = mvSPR(topology, weight=40.0)
+
+# Finally, we combine the topology and the branch length vector into a deterministic node that represents our phylogeny:
+
+tree := treeAssembly(topology, branch_lengths)
+# For the nucleotide substitution models we will specify a general time-reversible (GTR) model for each locus. We will use an uninformative Dirichlet distribution as prior on the stationary frequencies (pi), and for the six exchangeability rates er. To estimate pi and er we use the MCMC move mvSimplexElementScale, which randomly changes one element of the simplex and then rescales the other elements so that they sum to one again. For each locus we construct the GTR rate matrix Q using the function fnGTR which puts together pi and er.
+
+for (i in 1:num_loci) {
+
+    er_prior <- v(1,1,1,1,1,1)
+    er[i] ~ dnDirichlet(er_prior)
+    er[i].setValue(simplex(v(1,1,1,1,1,1)))
+    moves[++mvi] = mvSimplexElementScale(er[i], weight=5)
+
+    pi_prior <- v(1,1,1,1)
+    pi[i] ~ dnDirichlet(pi_prior)
+    pi[i].setValue(simplex(v(1,1,1,1)))
+    moves[++mvi] = mvSimplexElementScale(pi[i], weight=5)
+
+    Q[i] := fnGTR(er[i], pi[i])
+}
+# Additionally, we estimate a substitution rate multiplier for each of the alignments except the first one. We draw the rate multipliers from an exponential distribution:
+
+for (i in 1:num_loci) {
+    if (i == 1) {
+        rate_multiplier[i] <- 1.0
+    } else {
+        rate_multiplier[i] ~ dnExponential(1)
+        moves[++mvi] = mvScale(rate_multiplier[i], weight=5)
+    }
+}
+# Our sequence evolution models are continuous-time Markov chains (CTMC) over the phylogeny. So we pass a GTR rate matrices Q, a rate_multiplier, and the tree into a phylogenetic CTMC distribution, one for each locus. We fix the value of the CTMC to our observed sequence data using the clamp function.
+
+for (i in 1:num_loci) {
+    ctmc[i] ~ dnPhyloCTMC(tree=tree, Q=Q[i], branchRates=rate_multiplier[i], type="DNA")
+    ctmc[i].clamp(data[i])  
+}
+
+# We now have fully defined our phylogenetic model, so we wrap it up and declare it complete:
+
+mymodel = model(Q)
+
+# Use function mvHomeologPhase to define a phasing proposal that swpas the sequences between any two mul-tree tips for a given locus. 
+
+for (i in 1:num_loci) {
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_oligostachyum_A", "Lygodium_oligostachyum_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_cubense_LYCU1_A", "Lygodium_cubense_LYCU1_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_heterodoxum_LYHE2_A", "Lygodium_heterodoxum_LYHE2_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_heterodoxum_LYHE5_A", "Lygodium_heterodoxum_LYHE5_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_heterodoxum_LYHE10_A", "Lygodium_heterodoxum_LYHE10_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_oligostachyum_LYOL2_A", "Lygodium_oligostachyum_LYOL2_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_smithianum_LYSM4_A", "Lygodium_smithianum_LYSM4_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_venustum_LYVE4_A", "Lygodium_venustum_LYVE4_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_xfayae_LYXF1_A", "Lygodium_xfayae_LYXF1_B", weight=2)
+    moves[++mvi] = mvHomeologPhase(ctmc[i], "Lygodium_xfayae_LYXF2_A", "Lygodium_xfayae_LYXF2_B", weight=2)
+}
+
+# Finally, we need to set up some monitors to draw samples from the chain. We'll set up three monitors used in standard phylogenetic analyses: one that writes a log file for most of the model parameters, another that writes the sampled trees to file, and also a screen monitor so we can view progress on our screen:
+
+mni = 0
+output_file = "output_Aug22/homologizer"
+monitors[++mni] = mnModel(filename=output_file + ".log", printgen=1)
+monitors[++mni] = mnFile(filename=output_file + ".trees", printgen=1, tree)
+monitors[++mni] = mnScreen(printgen=1)
+
+# Additionally we need to define special monitors for logging samples of the phase of each locus. These are defined using mnHomeologPhase. We must specify one of these for each of the loci being phased.
+
+for (i in 1:num_loci){
+    log_file = output_file + "_locus_" + i + "_phase.log"
+    monitors[++mni] = mnHomeologPhase(filename=log_file, printgen=1, ctmc[i])
+}
+
+## 06 Running the MCMC 
+
+## CHANGING NUMBER OF GENERATIONS HERE! 
+
+mymcmc = mcmc(mymodel, monitors, moves)
+mymcmc.run(generations=50000)
+
+# summarize results
+treetrace = readTreeTrace(output_file + ".trees", treetype="non-clock", burnin=0.25) 
+map_tree = mapTree(treetrace, output_file + "_map.tree")
+mcc_tree = mccTree(treetrace, output_file + "_mcc.tree")
+
