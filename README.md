@@ -2,7 +2,7 @@
 
 This repository is for code and data related to the target-capture analysis of the genus <i>Lygodium</i> as presented in the paper: 
 
->All tangled up: Unraveling phylogenetics and reticulate evolution in the vining ferns, Lygodium (Lygodiaceae, Schizaeales)
+>All tangled up: Unraveling phylogenetics and reticulate evolution in the vining ferns, <i>Lygodium</i> (Lygodiaceae, Schizaeales)
 >
 >Jessie A. Pelosi, Bethany A. Zumwalde, Weston L. Testo, Emily H. Kim, J. Gordon Burleigh, and Emily B. Sessa. 
 
