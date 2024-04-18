@@ -99,7 +99,9 @@ The reads mapping to the output from HybPiper are then extracted from the total 
 ```
 bash 2_extract_mapped_reads.sh -p ./
 ```
-The R script `2a_prepare_bbsplit_script.R` is then run to generate the bash scripts to run bbsplit (simultaneous mapping to the designated references). 
+The R script `2a_prepare_bbsplit_script.R` is then run to generate the bash scripts to run bbsplit (simultaneous mapping to the designated references). The individual parameters are set in the config file `config.txt`. After running the resulting bash script (which runs bbmap), the next R script `2b_collate_bbsplit_results.R` is run to generate a summary table of the mapping results. 
+
+The actual phasing process is prepared with `3a_prepare_phasing_script.R`. The results are then assembled with HybPiper (see above). We were unable to use the `4a_merge_sequence_lists.R` to merge phased and normal sequences - we substituted this with a set of commmands using [SeqKit ver 2.8.1](https://bioinf.shenwei.me/seqkit/). 
 
 
 
