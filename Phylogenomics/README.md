@@ -1,24 +1,7 @@
-# Assembly 
+# Assemblies 
 Sequence data were filtered, trimmed, and assembled using the scripts available from [Breinholt et al. (2021)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11406). This is a series of perl scripts that uses an iterative baited assembly (IBA) approach. 
 
-# Nuclear Phylogenomics (using output from GoFlag pipeline)
-Each locus was aligned with [MAFFT ver 7.490](https://academic.oup.com/nar/article/33/2/511/2549118?login=false). 
-```
-mafft --thread 4 --adjustdirectionaccurately --allowshift --unalignlevel 0.8 --leavegappyregion --maxiterate 5 --globalpair $file > $file.aln
-```
-
-Gene trees were generated with [IQTREE ver 2.1.3](https://academic.oup.com/mbe/article/37/5/1530/5721363). 
-```
-iqtree2 -s $file -m MFP --alrt 1000 -B 1000 --redo -T 1
-```
-
-Species trees were generated with [ASTRAL ver 5.7.7](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2129-y). 
-```
-cat *.treefile > genetrees.tre 
-astral -in genetrees.tre -out speciestree.tre 
-```
-
-# HybPiper
+## HybPiper
 
 We used [HyPiper ver 2.0.1](https://github.com/mossmatters/HybPiper) to also assemble the nuclear target loci from trimmed reads for each sample. 
 ```
@@ -33,6 +16,32 @@ General statistics for each dataset were generated with the folllowing commands:
 hybpiper stats -t_dna hybpiperRefSeqs.cat.fasta gene name.list 
 hybpiper stats -t_dna hybpiperRefSeqs.cat.fasta supercontig name.list
 ```
+
+# Nuclear Phylogenomics 
+Using the output from either HybPiper or the GoFlag pipeline: 
+
+Each locus was aligned with [MAFFT ver 7.490](https://academic.oup.com/nar/article/33/2/511/2549118?login=false). 
+```
+mafft --thread 4 --adjustdirectionaccurately --allowshift --unalignlevel 0.8 --leavegappyregion --maxiterate 5 --globalpair $file > $file.aln
+```
+
+For the GoFlag data, we removed columns with less than 4 tips present using the perl script `deletecol_13Aug.pl`. For the HybPiper alignments, we removed columns with >80% missing tips using [trimAl ver 1.4.1](http://trimal.cgenomics.org/trimal). 
+
+```
+trimal -in $file.aln -out $file.aln.trim -gt 0.2
+```
+
+Gene trees were generated with [IQTREE ver 2.1.3](https://academic.oup.com/mbe/article/37/5/1530/5721363). 
+```
+iqtree2 -s $file -m MFP --alrt 1000 -B 1000 --redo -T 1
+```
+
+Species trees were generated with [ASTRAL ver 5.7.7](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2129-y). 
+```
+cat *.treefile > genetrees.tre 
+astral -in genetrees.tre -out speciestree.tre 
+```
+
 
 # Plastid Phylogenomics 
 Plastid genes were assembled from filtereed and trimmed reads using [GetOrganelle ver 1.7.3.5](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02154-5).  
@@ -71,5 +80,26 @@ The 20 loci with the greatest taxon occupancy from the PATÉ phasing were used a
 mpirun -np 6 rb-mpi lygodium_homologizer.rev
 ```
 The data and scripts for running homologizer are available under `Phylogenomics/homologizer/`. 
+
 ## HybPhaser 
+
+We further used [HybPhaser ver 2.0](https://github.com/LarsNauheimer/HybPhaser) to phase alleles.
+
+The first step in HybPhaser was to generate consensus sequences by re-mapping sample reads to the output from HybPiper. 
+```
+bash 1_generate_consensus_sequences.sh -s $sample -o HybPhaser_out -p ../HybPiper
+```
+Several R scripts are then run to generate basic statistics and filter the resulting consensus sequences. Note that I made some minor changes to 1b and 1c as there were issues with the ones provided in the HybPhaser repository (these scripts can be found in this directory). 
+```
+Rscript 1a_count_snps.R
+Rscript 1b_assess_dataset_JAP.R
+Rscript_1c_generate_sequence_lists_JAP.R
+```
+The reads mapping to the output from HybPiper are then extracted from the total set of reads. 
+```
+bash 2_extract_mapped_reads.sh -p ./
+```
+The R script `2a_prepare_bbsplit_script.R` is then run to generate the bash scripts to run bbsplit (simultaneous mapping to the designated references). 
+
+
 
