@@ -1,7 +1,7 @@
 # Assembly 
 Sequence data were filtered, trimmed, and assembled using the scripts available from [Breinholt et al. (2021)](https://bsapubs.onlinelibrary.wiley.com/doi/full/10.1002/aps3.11406). This is a series of perl scripts that uses an iterative baited assembly (IBA) approach. 
 
-# Nuclear Phylogenomics
+# Nuclear Phylogenomics (using output from GoFlag pipeline)
 Each locus was aligned with [MAFFT ver 7.490](https://academic.oup.com/nar/article/33/2/511/2549118?login=false). 
 ```
 mafft --thread 4 --adjustdirectionaccurately --allowshift --unalignlevel 0.8 --leavegappyregion --maxiterate 5 --globalpair $file > $file.aln
@@ -16,6 +16,22 @@ Species trees were generated with [ASTRAL ver 5.7.7](https://bmcbioinformatics.b
 ```
 cat *.treefile > genetrees.tre 
 astral -in genetrees.tre -out speciestree.tre 
+```
+
+# HybPiper
+
+We used [HyPiper ver 2.0.1](https://github.com/mossmatters/HybPiper) to also assemble the nuclear target loci from trimmed reads for each sample. 
+```
+hybpiper assemble --cpu 16 -t_dna hybpiperRefSeqs.cat.fasta -r trimmed_reads/"$name"*.fq.gz --prefix "$name" --bwa
+```
+To get supercontigs, we then ran:
+```
+hybpiper assemble --run_intronerate --start_from exonerate_contigs --cpu 16 -t_dna hybpiperRefSeqs.cat.fasta -r "$name"*.fq.gz --prefix "$name" --bwa
+```
+General statistics for each dataset were generated with the folllowing commands: 
+```
+hybpiper stats -t_dna hybpiperRefSeqs.cat.fasta gene name.list 
+hybpiper stats -t_dna hybpiperRefSeqs.cat.fasta supercontig name.list
 ```
 
 # Plastid Phylogenomics 
